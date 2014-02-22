@@ -1,0 +1,125 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@using GovTest.Models
+@using GovTest.Helpers
+
+@model  PagedList.StaticPagedList<GovTest.Models.HotSpot>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Wifi HotSpot</h2>
+
+<div class="row well">
+    <form class="form" role="form">
+        <div class="col-lg-3">
+            <div class="input-group">
+                <span class="input-group-addon">區域</span>
+                @*@Html.DropDownList("Districts", null, "全部", new { @class = "form-control"})*@
+                @ViewBag.Districts
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="input-group">
+                <span class="input-group-addon">熱點分類</span>
+                @Html.DropDownList("Types", null, "全部", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                <span class="input-group-addon">業者</span>
+                @Html.DropDownList("Companys", null, "全部", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <button type="submit" id="ButtonSubmit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-search"></span>查詢
+            </button>
+            <button type="button" id="button" class="btn btn-primary">
+                <span class="glyphicon glyphicon-search"></span>Test
+            </button>
+        </div>
+    </form>
+</div>
+
+<div>
+    @*@Html.Raw(Html.CheckBoxList("CityDDL", (List<CheckBoxListInfo>)ViewData["CheckBoxList"], null, Position.Vertical, 4))*@
+    <p>
+        @Html.CheckBoxList("CheckBox", (IEnumerable<SelectListItem>)ViewBag.List, null, 5)
+    </p>
+    <p>
+       @* @Html.CheckBoxListVertical("CheckBoxList", (IEnumerable<SelectListItem>)ViewBag.List, null, 5)*@
+    </p>
+    <p>
+        @Html.RadioButtonList("CheckBoxList", (IEnumerable<SelectListItem>)ViewBag.List, null, 5)
+    </p>
+    <p>
+        @Html.RadioButtonListVertical("CheckBoxList", (IEnumerable<SelectListItem>)ViewBag.List, null, 5)
+    </p>
+</div>
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new 
+        {
+            page = page,
+            districts = ViewBag.SelectedDistrict,
+            types = ViewBag.SelectedType,
+            company = ViewBag.SelectedCompany
+        }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+
+<table class="table table-striped tabke-hover">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Spot_Name)</th>
+
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Type)</th>
+
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Company)</th>
+
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().District)</th>
+
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Address)</th>
+
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Apparatus_Name)</th>
+
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().latitude)</th>
+
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().longitude)</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelitem => item.Spot_Name)</td>
+
+            <td>@Html.DisplayFor(modelitem => item.Type)</td>
+
+            <td>@Html.DisplayFor(modelitem => item.Company)</td>
+
+            <td>@Html.DisplayFor(modelitem => item.District)</td>
+
+            <td>@Html.DisplayFor(modelitem => item.Address)</td>
+
+            <td>@Html.DisplayFor(modelitem => item.Apparatus_Name)</td>
+
+            <td>@Html.DisplayFor(modelitem => item.latitude)</td>
+
+            <td>@Html.DisplayFor(modelitem => item.longitude)</td>
+        </tr>
+    }
+</table>
+
+@section scripts{
+<script src="~/Scripts/main.js"></script>
+<script>
+
+    jQuery(document).ready(function () {
+        jQuery("#button").click(function () {
+            var test1 = String.format("{1} - {0}", "asp.net", "mvc");
+            console.log(test1);
+
+            var test2 = "{0}, {1}, {0}".format("android", "google");
+            console.log(test2);
+        });
+    });
+</script>
+
+}
