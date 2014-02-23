@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using MvcPaging;
 using PageTest.Models;
 using PageTest.Helper;
+using StackExchange.Profiling;
 
 namespace PageTest.Controllers
 {
@@ -70,26 +71,34 @@ namespace PageTest.Controllers
 
         public ActionResult PageMethod3(int? page)
         {
-            ViewData["CategoryDDL"] = this.GenerateCategoryDDL(null);
-            return View();
+            var profiler = MiniProfiler.Current;
+            using (profiler.Step("Page - PageMethod3"))
+            {
+                ViewData["CategoryDDL"] = this.GenerateCategoryDDL(null);
+                return View();
+            }
         }
 
         public ActionResult PageContent(int? page, string categoryId)
         {
-            if (string.IsNullOrEmpty(categoryId))
+            var profiler = MiniProfiler.Current;
+            using (profiler.Step("Page - PageContent"))
             {
-                return View();
-            }
-            else
-            {
-                int id = int.Parse(categoryId);
-                var result = this.entity.Products.Where(a => a.CategoryID == id).ToList();
-                int currentPageIndex = page.HasValue ? page.Value - 1 : 0;
-                
-                ViewData["CurrentPage"] = currentPageIndex;
-                var dataPaged = result.ToPagedList(currentPageIndex, 5);
+                if (string.IsNullOrEmpty(categoryId))
+                {
+                    return View();
+                }
+                else
+                {
+                    int id = int.Parse(categoryId);
+                    var result = this.entity.Products.Where(a => a.CategoryID == id).ToList();
+                    int currentPageIndex = page.HasValue ? page.Value - 1 : 0;
 
-                return View(dataPaged);
+                    ViewData["CurrentPage"] = currentPageIndex;
+                    var dataPaged = result.ToPagedList(currentPageIndex, 5);
+
+                    return View(dataPaged);
+                }
             }
         }
 
