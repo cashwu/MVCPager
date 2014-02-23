@@ -1,0 +1,92 @@
+﻿@using PageTest.Models
+@using PageTest.Helper
+@using MvcPaging
+
+@model IPagedList<Product>
+
+@{
+    Layout = null;
+}
+
+<div id="PagerWrapperTop" class="PagerWrapper" style="text-align:left">
+    <div id="pager" class="pager">
+        @if (Model != null)
+        {
+            int currentPage = ViewData["CurrentPage"] == null ? 0 : int.Parse(ViewData["CurrentPage"].ToString());
+            @Html.MvcSimplePostPager(currentPage, Model.PageSize, Model.TotalItemCount, true)
+        }
+    </div>
+</div>
+
+<table class="table table-striped tabke-hover">
+    <tr>
+        <th>
+            ProductName
+        </th>
+        <th>
+            QuantityPerUnit
+        </th>
+        <th>
+            UnitPrice
+        </th>
+        <th>
+            UnitsInStock
+        </th>
+        <th>
+            UnitsOnOrder
+        </th>
+        <th>
+            ReorderLevel
+        </th>
+        <th>
+            Discontinued
+        </th>
+        <th>
+            CategoryName
+        </th>
+        <th>
+            CompanyName
+        </th>
+    </tr>
+    @if (Model == null)
+    {
+        <tr>
+            <td colspan="9" align="center">No Data.</td>
+        </tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityPerUnit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitsInStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitsOnOrder)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discontinued)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supplier.CompanyName)
+                </td>
+            </tr>
+        }
+    }
+</table>

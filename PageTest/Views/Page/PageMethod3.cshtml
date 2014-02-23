@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "PageMethod3";
+}
+
+<h2>PageMethod3</h2>
+
+<div id="formArea" style="width: 90%; margin-left: auto; margin-right: auto;">
+    @using (Html.BeginForm("PageMethod3", "Page", FormMethod.Post, new { id = "formPager" }))
+    {
+        @:Category: @ViewData["CategoryDDL"]
+        <input type="button" id="ButtonSearch" value="List" />
+    }
+</div>
+
+
+<div id="PageContent">
+    @{
+        Html.RenderAction("PageContent", "Page");
+    }
+</div>
+
+@section scripts
+{
+    <script language="javascript" type="text/javascript">
+        var selectedCategoryID = 0;
+
+        $(document).ready(function () {
+
+            PageContent_Init();
+        });
+
+        function PageContent_Init() {
+            $("#table tr:odd").css('background-color', '#F5FBFC');
+            PostPager();
+        }
+
+        $("#ButtonSearch").click(function () {
+            var categoryId = $.trim($("#CategoryDDL option:selected").val());
+            if (categoryId.length == 0) {
+                alert("Please select Category.");
+                return false;
+            }
+            else {
+                selectedCategoryID = parseInt(categoryId, 0);
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("PageContent", "Page")',
+                    data: { categoryId: categoryId },
+                    dataType: "html",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        $("#PageContent").html(data);
+                        PageContent_Init();
+                    }
+                });
+            }
+        });
+
+        function PostPager() {
+            $(".PostPager").each(function (i, item) {
+                $("item").attr("href", "#");
+            });
+            $(".PostPager.first-page").click(function () {
+                GoToPage(1);
+            });
+            $(".PostPager.previous-page,.next-page,.last-page,.number-page").click(function () {
+                GoToPage($(this).attr("value"));
+            });
+        }
+
+        function GoToPage(page) {
+
+            if (selectedCategoryID.length == 0 || selectedCategoryID == 0) {
+                alert("Please select Category.");
+                return false;
+            }
+            else {
+                var categoryId = $.trim($("#CategoryDDL option:selected").val());
+                if (categoryId != selectedCategoryID.toString()) {
+                    $("#CategoryDDL option[value=" + selectedCategoryID + "]").attr("selected", true);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("PageContent", "Page")',
+                    data: { page: page, categoryId: selectedCategoryID },
+                    dataType: "html",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        $("#PageContent").html(data);
+                        PageContent_Init();
+                    }
+                });
+            }
+        }
+
+    </script>
+}
