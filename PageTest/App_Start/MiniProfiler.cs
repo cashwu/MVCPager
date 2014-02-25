@@ -34,7 +34,7 @@ namespace PageTest.App_Start
             //      in your master layout
 
             //TODO: Non SQL Server based installs can use other formatters like: new StackExchange.Profiling.SqlFormatters.InlineFormatter()
-            MiniProfiler.Settings.SqlFormatter = new StackExchange.Profiling.SqlFormatters.SqlServerFormatter();
+            //MiniProfiler.Settings.SqlFormatter = new StackExchange.Profiling.SqlFormatters.SqlServerFormatter();
 
 			//TODO: To profile a standard DbConnection: 
 			// var profiled = new ProfiledDbConnection(cnn, MiniProfiler.Current);
@@ -43,10 +43,10 @@ namespace PageTest.App_Start
 			//MiniProfilerEF.Initialize();
 
             //Make sure the MiniProfiler handles BeginRequest and EndRequest
-            DynamicModuleUtility.RegisterModule(typeof(MiniProfilerStartupModule));
+            //DynamicModuleUtility.RegisterModule(typeof(MiniProfilerStartupModule));
 
             //Setup profiler for Controllers via a Global ActionFilter
-            GlobalFilters.Filters.Add(new ProfilingActionFilter());
+            //GlobalFilters.Filters.Add(new ProfilingActionFilter());
 
 			// You can use this to check if a request is allowed to view results
             //MiniProfiler.Settings.Results_Authorize = (request) =>
