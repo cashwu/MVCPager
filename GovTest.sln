@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcPaging", "MvcPaging\MvcP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonTest", "JsonTest\JsonTest.csproj", "{7B995053-A2F9-4475-9CC1-D81107C4405E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OracleTest", "OracleTest\OracleTest.csproj", "{2FFB8F3B-571A-4873-A52B-ACE0C572BA5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{7B995053-A2F9-4475-9CC1-D81107C4405E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B995053-A2F9-4475-9CC1-D81107C4405E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B995053-A2F9-4475-9CC1-D81107C4405E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FFB8F3B-571A-4873-A52B-ACE0C572BA5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FFB8F3B-571A-4873-A52B-ACE0C572BA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FFB8F3B-571A-4873-A52B-ACE0C572BA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FFB8F3B-571A-4873-A52B-ACE0C572BA5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
