@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "Image";
+}
+
+<h2>Image</h2>
+
+<div id="Panel1" style="height: 100px; padding: 5px 0px 5px 0px;">
+    <img id="Image3" style="display:none" />
+</div>
+<hr />
+
+<input type="button" id="ButtonCrop" value="Save the Crop Image" />
+
+<div align="center">
+    <img id="Image1" style="float: left; margin-right: 10px;" alt="Create Thumbnail" />
+    <div style="float: left; position: relative; overflow: hidden; width: 100px; height: 100px;">
+        <img id="Image2" style="position: relative;" alt="Thumbnail Preview" />
+    </div>
+</div>
+<input type="hidden" id="x1" value="" />
+<input type="hidden" id="y1" value="" />
+<input type="hidden" id="x2" value="" />
+<input type="hidden" id="y2" value="" />
+
+@section scripts
+{
+    <script src="~/Scripts/ImageAreaSelect/jquery.imgareaselect.js"></script>
+    <script>
+        $(function () {
+            $("img#Image1").imgAreaSelect(
+            {
+                handles: true,
+                aspectRatio: "1:1",
+                x1: 0, y1: 0, x2: 100, y2: 100,
+                onSelectChange: preview
+            })
+
+            $("#ButtonCrop").click(function ()
+            {
+                SaveCropEventHandler();
+            })
+        });
+
+        function preview(img, selection)
+        {
+            var scalX = 100 / selection.width;
+            var scalY = 100 / selection.height;
+
+            var img = new Image();
+            img.src = $("#Image").attr("src");
+
+            var pic_real_width = img.width;
+            var pic_real_height = img.height;
+
+            $("#Image1 + div > img").css(
+            {
+                width: Math.round(scalX * pic_real_width) + "px",
+                height: Math.round(scalY * pic_real_height) + "px",
+                marginLeft: "-" + Math.round(scalX * selection.x1) + "px",
+                marginTop: "_" + math.round(scalY * selection.y1) + "px"
+            });
+
+            $("input[name=x1]").val(selection.x1);
+            $("input[name=y1]").val(selection.y1);
+            $("input[name=x2]").val(selection.x2);
+            $("input[name=y2]").val(selection.y2);
+        }
+
+        function SaveCropEventHandler()
+        {
+            var x1 = $("input[name=x1]").val();
+            var y1 = $("input[name=y1]").val();
+            var x2 = $("input[name=x2]").val();
+            var y2 = $("input[name=y2]").val();
+
+            if (x1.length == 0 && x2.length == 0 && y1.length == 0 && y2.length == 0) {
+                alert("please select crop area");
+                return false;
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CropImage", "Home")',
+                    data: { id: $("#UploadImage_ID").val(), x1: x1, x2: x2, y1: y1, y2: y2},
+                    dataType: "json",
+                    async: false,
+                    cache: false,
+                    success: function (result) {
+                        if (result) {
+                            if(result.result != "OK"){
+                                alert(result.Msg);
+                                location.href = '@Url.Action("Crop", "Home")' + "?id=" + $("#UploadImage_ID").val();
+                            }
+                            else {
+                                alert("crop OK");
+                                $("img#Iamge3").attr("src", result.CropImage);
+                                $("img#Image3").show();
+                            }
+                            return false;
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}
