@@ -1,0 +1,91 @@
+﻿
+@model CKEditor.Models.Article
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("Create", "Home", FormMethod.Post, new { id = "FormCreate" }))
+{
+    <fieldset>
+        <legend>Article</legend>
+        <div class="editor-label">
+            @Html.LabelFor(Model => Model.Subject)
+        </div>
+        <div class="editor-field">
+            @Html.TextBox("subject", null, new { id ="Subject", style ="width: 400px", MaxLength = "100" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(Model => Model.Content)
+        </div>
+        <div class="editor-field">
+            @Html.TextArea("content", new { id ="Content", @name="content" })
+        </div>
+        <p>
+            <input type="button" value="Create" id="ButtonCreate" />
+        </p>
+    </fieldset>
+}
+
+@section scripts
+{
+    <script src="~/Scripts/JSLINQ.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var editor = CKEDITOR.editor.replace("content", { skin: "kama", width: "830px" });
+
+            $("#ButtonCreate").click(function () {
+                CreateArticle(editor);
+            });
+        });
+
+        function CreateArticle(editor)
+        {
+            var subject = $.trim($("#Subject").val());
+            var content = editor.getData();
+            if (subject.length == 0) {
+                alert("please input subject");
+                return false;
+            }
+            if (content.length == 0) {
+                alert("please input content");
+                return false;
+            }
+
+            var values = $("#FormCreate").serializeArray();
+            new JSLINQ(values).Where(function (item) {
+                if (item["name"] == "content" && item["value"].length == 0) {
+                    item["value"] = editor.getData();
+                }
+            });
+            
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Create", "Home")',
+                data: jQuery.param(values),
+                cache: false,
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.Msg) {
+                        alert(data.Msg);
+                        return false;
+                    }
+                    else {
+                        if (data.Result == "Success") {
+                            alert("Success");
+                            location.href = '@Url.Action("Index", "Home")';
+                        }
+                        else {
+                            alert(data.ResultMessage);
+                            return false;
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+}

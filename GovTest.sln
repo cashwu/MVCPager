@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonTest", "JsonTest\JsonTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OracleTest", "OracleTest\OracleTest.csproj", "{2FFB8F3B-571A-4873-A52B-ACE0C572BA5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CKEditor", "CKEditor\CKEditor.csproj", "{53C32618-59F0-47E4-9EF1-44CC9D850D30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2FFB8F3B-571A-4873-A52B-ACE0C572BA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FFB8F3B-571A-4873-A52B-ACE0C572BA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FFB8F3B-571A-4873-A52B-ACE0C572BA5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53C32618-59F0-47E4-9EF1-44CC9D850D30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53C32618-59F0-47E4-9EF1-44CC9D850D30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53C32618-59F0-47E4-9EF1-44CC9D850D30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53C32618-59F0-47E4-9EF1-44CC9D850D30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
