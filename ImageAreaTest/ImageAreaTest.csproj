@@ -237,6 +237,16 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImageCrop.Models\ImageCrop.Models.csproj">
+      <Project>{c364f1b0-c72a-476e-acf5-0ee3c5a2725a}</Project>
+      <Name>ImageCrop.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageCrop\ImageCrop.csproj">
+      <Project>{2f46cb4e-5527-4d09-9697-5d01c456a03b}</Project>
+      <Name>ImageCrop</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
