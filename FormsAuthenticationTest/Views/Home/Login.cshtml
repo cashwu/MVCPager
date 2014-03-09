@@ -1,0 +1,35 @@
+﻿@using FormsAuthenticationTest.Models
+
+@model LoginViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    </head>
+    <body>
+        <div>
+            @using (Html.BeginForm("Login", "Home", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { autocomplete = "off" }))
+            {
+                @Html.TextBoxFor(m => m.Account)
+                @Html.ValidationMessageFor(m => m.Account)
+                <br />
+                
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+                <br />
+                
+                <input type="submit" value="Login" />
+            }
+        </div>
+    </body>
+</html>
