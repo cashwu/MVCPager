@@ -137,14 +137,43 @@ namespace ImageAreaTest.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(string fileName)
+        public JsonResult Save(string fileName)
         {
             var jo = new Dictionary<string, string>();
 
             CropImageUtility cropUtils = new CropImageUtility(this.UploadPath, this.OriginalPath, string.Empty);
             var result = cropUtils.SaveUploadImageToOriginalFolder(fileName);
 
-            return View();
+            if (!result["result"].Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                jo.Add("result", result["result"]);
+                jo.Add("msg", result["msg"]);
+
+                return Json(jo);
+            }
+
+            try
+            {
+                UploadImage instance = new UploadImage()
+                {
+                    ID = Guid.NewGuid(),
+                    OriginalImage = fileName,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now
+                };
+
+                service.Add(instance);
+
+                jo.Add("result", "success");
+                jo.Add("msg", string.Format(@"/{0}/{1}", OriginalFolder, fileName));
+                jo.Add("id", instance.ID.ToString());
+
+                return Json(jo);
+            }
+            catch (Exception ex)
+            {
+                return Json(MiscUtility.GetExceptionMsg(ex.Message));
+            }
         }
 
         public JsonResult Cancel(string fileName)
@@ -229,25 +258,27 @@ namespace ImageAreaTest.Controllers
                     new int[] { x1.Value, x2.Value, y1.Value, y2.Value }
                 );
 
-            ////if (processResult["result"].Equals("Success", StringComparison.OrdinalIgnoreCase))
-            ////{
-            ////    service.Update(instance.ID, processResult["CropImage"]);
+            if (processResult["result"].Equals("Success", StringComparison.OrdinalIgnoreCase))
+            {
+                //裁剪圖片檔名儲存到資料庫
+                service.Update(instance.ID, processResult["CropImage"]);
 
-            ////    if (!string.IsNullOrWhiteSpace(processResult["OldCropImage"]))
-            ////    {
-            ////        cropUtils.DeleteCropImage(processResult["OldCropImage"]);
-            ////    }
+                //如果有之前的裁剪圖片，則刪除
+                if (!string.IsNullOrWhiteSpace(processResult["OldCropImage"]))
+                {
+                    cropUtils.DeleteCropImage(processResult["OldCropImage"]);
+                }
 
-            ////    result.Add("result", "OK");
-            ////    result.Add("msg", "");
-            ////    result.Add("OriginalImage", string.Format(@"/{0}/{1}", this.OriginalFolder, processResult["OriginalImage"]));
-            ////    result.Add("CropImage", string.Format(@"/{0}/{1}", this.CropFolder, processResult["CropImage"]));
-            ////}
-            ////else
-            ////{
-            ////    result.Add("result", processResult["result"]);
-            ////    result.Add("msg", processResult["msg"]);
-            ////}
+                result.Add("result", "OK");
+                result.Add("msg", "");
+                result.Add("OriginalImage", string.Format(@"/{0}/{1}", this.OriginalFolder, processResult["OriginalImage"]));
+                result.Add("CropImage", string.Format(@"/{0}/{1}", this.CropFolder, processResult["CropImage"]));
+            }
+            else
+            {
+                result.Add("result", processResult["result"]);
+                result.Add("msg", processResult["msg"]);
+            }
 
             return Json(result);
         }
