@@ -23,6 +23,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageCrop.Models", "ImageCr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsAuthenticationTest", "FormsAuthenticationTest\FormsAuthenticationTest.csproj", "{669AB24C-8258-48C0-AB89-56BD0AE77811}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KendoUITest", "KendoUITest\KendoUITest.csproj", "{8BA37335-9DDB-446E-B7A7-0A91B95D5C82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUploadTest", "FileUploadTest\FileUploadTest.csproj", "{97ECE2B5-F259-4FFE-9DF5-D712C854D1AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{56753103-4534-4BFC-A9A7-DBE48F5CD6A4}"
+	ProjectSection(SolutionItems) = preProject
+		WebEssentials-Settings.json = WebEssentials-Settings.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +78,14 @@ Global
 		{669AB24C-8258-48C0-AB89-56BD0AE77811}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{669AB24C-8258-48C0-AB89-56BD0AE77811}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{669AB24C-8258-48C0-AB89-56BD0AE77811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BA37335-9DDB-446E-B7A7-0A91B95D5C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BA37335-9DDB-446E-B7A7-0A91B95D5C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BA37335-9DDB-446E-B7A7-0A91B95D5C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BA37335-9DDB-446E-B7A7-0A91B95D5C82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97ECE2B5-F259-4FFE-9DF5-D712C854D1AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97ECE2B5-F259-4FFE-9DF5-D712C854D1AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97ECE2B5-F259-4FFE-9DF5-D712C854D1AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97ECE2B5-F259-4FFE-9DF5-D712C854D1AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
