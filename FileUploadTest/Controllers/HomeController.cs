@@ -56,12 +56,12 @@ namespace FileUploadTest.Controllers
 
                 //因為有可以會改檔名，所以要使用fineuploder的檔名
                 //string filepath = Path.Combine(path, Path.GetFileName(uploadfile.FileName));
-                string filepath = Path.Combine(path, filename);
-                uploadfile.SaveAs(filepath);
+                string fileUri = Path.Combine(path, filename);
+                uploadfile.SaveAs(fileUri);
 
                 Dictionary<string, object> result = new Dictionary<string, object>();
                 result.Add("success", true);
-                result.Add("filepath", filepath);
+                result.Add("fileUri", fileUri);
                 //改變預設傳入檔案的 guid
                 //result.Add("newUuid", "abc123");
 

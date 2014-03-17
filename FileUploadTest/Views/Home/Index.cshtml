@@ -18,7 +18,7 @@
         <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
             上傳
         </div>
-        <input type="hidden" id="filepath" />
+        <input type="hidden" id="fileUri" />
     </div>
 </div>
 
@@ -57,7 +57,9 @@
                     filenameParam: "filename",
                     //----自定 後端接收 檔案id (guid) 的參數名稱, 和刪除時傳入的相同
                     uuidName: "fileid"
-                    //----可傳入其它參數，這裡不能動態去抓欄位的值，要在submit的事件裡面寫
+                    //----可傳入其它參數，這裡不能動態去抓欄位的值
+                    //----如果是兩階段上傳的話，選完檔案時就會跑 submit => submitted，上傳時才會跑 upload
+                    //----所以最好寫在 upload 裡面
                     //params: { other: "" }
                 },
                 text: {
@@ -70,6 +72,7 @@
                     //----限制附檔名
                     //allowedExtensions: ["jpg", "jpeg", "gif"]
                 },
+                //----自定 message
                 messages: {
                     typeError: "{file} 檔案類型錯誤. 只允許上傳以下副檔名的檔案：{extensions}.",
                     sizeError: "{file} 超過檔案大小最大限制, 最大檔案大小為 {sizeLimit}.",
@@ -91,7 +94,7 @@
                 //
                 //},
                 //----指定 template，預設為 qq-template
-                template: "qq-template", 
+                template: "qq-template",
                 //----指定 css class
                 //classes: {
                 //    success: 'alert alert-success',
@@ -99,7 +102,7 @@
                 //},
                 //----是否可多檔上傳，預設為 true
                 multiple: false,
-                //----是否自動上傳，預設為true
+                //----是否自動上傳，預設為true，為false 時就會變成兩階段上傳
                 autoUpload: false
                 //----是否在 console 顯示預設的 debug 訊息，預設 debug 為 false
                 //debug: true
@@ -117,20 +120,23 @@
 
         });
 
-        function onSubmit(id, name) {
+        //----name 為檔案名稱
+        //----id 為上傳檔案個數的流水號，從 0 開始累加，遇到失敗一樣累加
+        function onSubmit(event, id, name) {
             console.log("onSubmit");
+        }
+
+        function onSubmitted(event, id, name) {
+            console.log("onSubmitted");
+        }
+
+        //----如果兩階段上傳，修改檔名時，這裡的 name 會變成修改過後的
+        function onUpload(event, id, name) {
+            console.log("onUpload");
 
             //抓欄位裡面的值，當成其它參數傳到後端
             var params = $("#params").val();
             $("#file-uploader").fineUploader('setParams', { 'other': params });
-        }
-
-        function onUpload(id, name) {
-            console.log("onUpload");
-        }
-
-        function onSubmitted(id, name) {
-            console.log("onSubmitted");
         }
 
         //----錯誤的事件
@@ -142,7 +148,7 @@
         function onComplete(event, id, name, responseJSON) {
             console.log(responseJSON, "onComplete");
             if (responseJSON.success) {
-                $("#filepath").val(responseJSON.filepath);
+                $("#fileUri").val(responseJSON.fileUri);
             }
         }
 
@@ -150,9 +156,12 @@
 
     <script type="text/template" id="qq-template">
         <div class="qq-uploader-selector qq-uploader">
+
+            <!--拖曳檔案上傳用 註解掉就不可用拖曳上傳-->
             <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
                 <span>拖曳檔案到這裡上傳</span>
             </div>
+
             <div class="qq-upload-button-selector qq-upload-button">
                 <div>選擇檔案</div>
             </div>
@@ -167,7 +176,7 @@
                     </div>
                     <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
 
-                    <!--顯示圖片縮圖用-->
+                    <!--顯示圖片縮圖用 註解掉就不會顯示縮圖-->
                     <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
 
                     <span class="qq-edit-filename-icon-selector qq-edit-filename-icon"></span>
