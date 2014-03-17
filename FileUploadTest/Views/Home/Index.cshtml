@@ -12,15 +12,34 @@
                 <p>Please enable JavaScript to use file uploader.</p>
             </noscript>
         </div>
-        <input type="hidden" id="filepath" />
         <br />
-        <input type="text" id="other" />
+        動態傳入其它參數 <input type="text" id="params" />
+        <br />
+        <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+            上傳
+        </div>
+        <input type="hidden" id="filepath" />
     </div>
 </div>
 
 @section css
 {
     <link href="@Url.Content("~/Content/fineuploader-4.4.0.css")" rel="stylesheet" type="text/css" />
+
+    <style>
+        /* For the bootstrapped demos */
+        li.alert-success {
+            background-color: #DFF0D8;
+        }
+
+        li.alert-error {
+            background-color: #F2DEDE;
+        }
+
+        .alert-error .qq-upload-failed-text {
+            display: inline;
+        }
+    </style>
 }
 
 @section scripts
@@ -29,7 +48,7 @@
 
     <script>
         $(document).ready(function () {
-            $("#file-uploader").fineUploader({
+            var manualuploader = $("#file-uploader").fineUploader({
                 request: {
                     endpoint: '@Url.Action("BasicUpload", "Home")',
                     //----自定 後端接收 檔案 的參數名稱
@@ -38,7 +57,7 @@
                     filenameParam: "filename",
                     //----自定 後端接收 檔案id (guid) 的參數名稱, 和刪除時傳入的相同
                     uuidName: "fileid"
-                    //----可傳入其它參數
+                    //----可傳入其它參數，這裡不能動態去抓欄位的值，要在submit的事件裡面寫
                     //params: { other: "" }
                 },
                 text: {
@@ -46,13 +65,16 @@
                     waitingForResponse: "上傳中.."
                 },
                 validation: {
+                    //----bytes 計算
                     sizeLimit: 5 * 1024 * 1024
                     //----限制附檔名
                     //allowedExtensions: ["jpg", "jpeg", "gif"]
                 },
                 messages: {
                     typeError: "{file} 檔案類型錯誤. 只允許上傳以下副檔名的檔案：{extensions}.",
-                    sizeError: "{file} 超過檔案大小最大限制, 最大檔案大小為 {sizeLimit}."
+                    sizeError: "{file} 超過檔案大小最大限制, 最大檔案大小為 {sizeLimit}.",
+                    noFilesError: "沒有檔案可以上傳.",
+                    emptyError: "{file} 檔案是空的, 請重新選擇檔案."
                 },
                 //----刪除檔案相關設定，預設 enabled 為 false
                 //deleteFile: {
@@ -66,10 +88,19 @@
                 //},
                 //----改變顯示訊息的方式
                 //showMessage: function (message){
-                //    
+                //
+                //},
+                //----指定 template，預設為 qq-template
+                template: "qq-template", 
+                //----指定 css class
+                //classes: {
+                //    success: 'alert alert-success',
+                //    fail: 'alert alert-error'
                 //},
                 //----是否可多檔上傳，預設為 true
-                multiple: false
+                multiple: false,
+                //----是否自動上傳，預設為true
+                autoUpload: false
                 //----是否在 console 顯示預設的 debug 訊息，預設 debug 為 false
                 //debug: true
             })
@@ -78,10 +109,20 @@
             .on("upload", onUpload)
             .on("error", onError)
             .on("complete", onComplete);
+
+            $("#triggerUpload").click(function () {
+                manualuploader.fineUploader("uploadStoredFiles");
+            });
+
+
         });
 
         function onSubmit(id, name) {
             console.log("onSubmit");
+
+            //抓欄位裡面的值，當成其它參數傳到後端
+            var params = $("#params").val();
+            $("#file-uploader").fineUploader('setParams', { 'other': params });
         }
 
         function onUpload(id, name) {
@@ -113,7 +154,7 @@
                 <span>拖曳檔案到這裡上傳</span>
             </div>
             <div class="qq-upload-button-selector qq-upload-button">
-                <div>上傳檔案</div>
+                <div>選擇檔案</div>
             </div>
             <span class="qq-drop-processing-selector qq-drop-processing">
                 <span>Processing dropped files...</span>
@@ -131,7 +172,10 @@
 
                     <span class="qq-edit-filename-icon-selector qq-edit-filename-icon"></span>
                     <span class="qq-upload-file-selector qq-upload-file"></span>
-                    <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
+
+                    <!--修改檔名用 input -->
+                    <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text" style="width: 304px;">
+
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <a class="qq-upload-cancel-selector qq-upload-cancel" href="#">取消上傳</a>
                     <a class="qq-upload-retry-selector qq-upload-retry" href="#">重新上傳</a>

@@ -54,7 +54,9 @@ namespace FileUploadTest.Controllers
                     Directory.CreateDirectory(path);
                 }
 
-                string filepath = string.Format(@"{0}\{1}", path, Path.GetFileName(uploadfile.FileName));
+                //因為有可以會改檔名，所以要使用fineuploder的檔名
+                //string filepath = Path.Combine(path, Path.GetFileName(uploadfile.FileName));
+                string filepath = Path.Combine(path, filename);
                 uploadfile.SaveAs(filepath);
 
                 Dictionary<string, object> result = new Dictionary<string, object>();
