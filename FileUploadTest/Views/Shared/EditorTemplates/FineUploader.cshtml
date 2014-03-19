@@ -1,0 +1,172 @@
+﻿
+<script src="@Url.Content("~/Scripts/jquery-1.10.2.js")" type="text/javascript"></script>
+@{
+    var htmlFieldPrefix = ViewData.TemplateInfo.HtmlFieldPrefix;
+}
+
+<div class="row">
+    <div class="col-md-10">
+        <div id="file-uploader">
+            <noscript>
+                <p>Please enable JavaScript to use file uploader.</p>
+            </noscript>
+        </div>
+        <br />
+        @*動態傳入其它參數 <input type="text" id="params" />
+        <br />
+        <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+            上傳
+        </div>*@
+        @Html.Hidden("")
+    </div>
+</div>
+
+<script>
+        $(document).ready(function () {
+            var manualuploader = $("#file-uploader").fineUploader({
+                request: {
+                    endpoint: '@Url.Action("BasicUpload", "Home")',
+                    //----自定 後端接收 檔案 的參數名稱
+                    inputName: "uploadfile",
+                    //----自定 後端接收 檔案名稱 的參數名稱
+                    filenameParam: "filename",
+                    //----自定 後端接收 檔案id (guid) 的參數名稱, 和刪除時傳入的相同
+                    uuidName: "fileid"
+                    //----可傳入其它參數，這裡不能動態去抓欄位的值
+                    //----如果是兩階段上傳的話，選完檔案時就會跑 submit => submitted，上傳時才會跑 upload
+                    //----所以最好寫在 upload 裡面
+                    //params: { other: "" }
+                },
+                text: {
+                    failUpload: "上傳失敗",
+                    waitingForResponse: "上傳中.."
+                },
+                validation: {
+                    //----bytes 計算
+                    sizeLimit: 5 * 1024 * 1024
+                    //----限制附檔名
+                    //allowedExtensions: ["jpg", "jpeg", "gif"]
+                },
+                //----自定 message
+                messages: {
+                    typeError: "{file} 檔案類型錯誤. 只允許上傳以下副檔名的檔案：{extensions}.",
+                    sizeError: "{file} 超過檔案大小最大限制, 最大檔案大小為 {sizeLimit}.",
+                    noFilesError: "沒有檔案可以上傳.",
+                    emptyError: "{file} 檔案是空的, 請重新選擇檔案."
+                },
+                //----刪除檔案相關設定，預設 enabled 為 false
+                //deleteFile: {
+                //    enabled: true,
+                //    method: "POST",
+                //    endpoint: '@Url.Action("BasicDelete", "Home")',
+                //    forceConfirm: true,
+                //    confirmMessage: "是否刪除檔案{filename}?",
+                //    deletingStatusText: "刪除中...",
+                //    deletingFailedText: "刪除失敗"
+                //},
+                //----改變顯示訊息的方式
+                //showMessage: function (message){
+                //
+                //},
+                //----指定 template，預設為 qq-template
+                template: "qq-template",
+                //----指定 css class
+                //classes: {
+                //    success: 'alert alert-success',
+                //    fail: 'alert alert-error'
+                //},
+                //----是否可多檔上傳，預設為 true
+                multiple: false,
+                //----是否自動上傳，預設為true，為false 時就會變成兩階段上傳
+                autoUpload: true
+                //----是否在 console 顯示預設的 debug 訊息，預設 debug 為 false
+                //debug: true
+            })
+            .on("submit", onSubmit)
+            .on("submitted", onSubmitted)
+            .on("upload", onUpload)
+            .on("error", onError)
+            .on("complete", onComplete);
+
+            $("#triggerUpload").click(function () {
+                manualuploader.fineUploader("uploadStoredFiles");
+            });
+
+
+        });
+
+        //----name 為檔案名稱
+        //----id 為上傳檔案個數的流水號，從 0 開始累加，遇到失敗一樣累加
+        function onSubmit(event, id, name) {
+            console.log("onSubmit");
+        }
+
+        function onSubmitted(event, id, name) {
+            console.log("onSubmitted");
+        }
+
+        //----如果兩階段上傳，修改檔名時，這裡的 name 會變成修改過後的
+        function onUpload(event, id, name) {
+            console.log("onUpload");
+
+            //抓欄位裡面的值，當成其它參數傳到後端
+            var params = $("#params").val();
+            $("#file-uploader").fineUploader('setParams', { 'other': params });
+        }
+
+        //----錯誤的事件
+        function onError(event, id, name, reason) {
+            console.log(reason, "onError");
+        }
+
+        //----完成的事件
+        function onComplete(event, id, name, responseJSON) {
+            console.log(responseJSON, "onComplete");
+            if (responseJSON.success) {
+
+                $("#" + "@htmlFieldPrefix").val(responseJSON.fileUri);
+            }
+        }
+</script>
+
+<script type="text/template" id="qq-template">
+    <div class="qq-uploader-selector qq-uploader">
+
+        <!--拖曳檔案上傳用 註解掉就不可用拖曳上傳-->
+        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+            <span>拖曳檔案到這裡上傳</span>
+        </div>
+
+        <div class="qq-upload-button-selector qq-upload-button">
+            <div>選擇檔案</div>
+        </div>
+        <span class="qq-drop-processing-selector qq-drop-processing">
+            <span>Processing dropped files...</span>
+            <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+        </span>
+        <ul class="qq-upload-list-selector qq-upload-list">
+            <li>
+                <div class="qq-progress-bar-container-selector">
+                    <div class="qq-progress-bar-selector qq-progress-bar"></div>
+                </div>
+                <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+
+                <!--顯示圖片縮圖用 註解掉就不會顯示縮圖-->
+                <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+
+                <span class="qq-edit-filename-icon-selector qq-edit-filename-icon"></span>
+                <span class="qq-upload-file-selector qq-upload-file"></span>
+
+                <!--修改檔名用 input -->
+                <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text" style="width: 304px;">
+
+                <span class="qq-upload-size-selector qq-upload-size"></span>
+                <a class="qq-upload-cancel-selector qq-upload-cancel" href="#">取消上傳</a>
+                <a class="qq-upload-retry-selector qq-upload-retry" href="#">重新上傳</a>
+                <a class="qq-upload-delete-selector qq-upload-delete" href="#">刪除</a>
+                <span class="qq-upload-status-text-selector qq-upload-status-text"></span>
+            </li>
+        </ul>
+    </div>
+</script>
+

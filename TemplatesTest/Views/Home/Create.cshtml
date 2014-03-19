@@ -1,0 +1,28 @@
+﻿
+@model TemplatesTest.Models.TemplateTB
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<div>
+    @Html.LabelFor(x => x.Date)
+</div>
+<div>
+    @Html.EditorFor(Model => Model.Date)
+</div>
+
+<div>
+    @Html.LabelFor(x => x.Age, new { id = "msg_age" })
+</div>
+<div>
+    @Html.EditorFor(Model => Model.Age)
+</div>
+
+<div>
+    @Html.LabelFor(x => x.Gender)
+</div>
+<div>
+    @Html.EditorFor(Model => Model.Gender)
+</div>

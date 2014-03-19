@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileUploadTest.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,13 @@ namespace FileUploadTest.Controllers
     public class HomeController : Controller
     {
         public ActionResult Index()
+        {
+            var model = new HomeViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Index(HomeViewModel model)
         {
             return View();
         }
