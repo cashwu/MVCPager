@@ -1,0 +1,13 @@
+﻿
+<script src="@Url.Content("~/Scripts/jquery.maskedinput.js")" type="text/javascript"></script>
+
+@Html.TextBox("")
+
+<script>
+    $(document).ready(function () {
+        jQuery.mask.definitions["~"] = "[12]";
+        $("#MemberID").mask("a~99999999")
+    });
+</script>
+
+

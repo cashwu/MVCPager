@@ -1,0 +1,25 @@
+﻿
+<script src="@Url.Content("~/Scripts/jquery-1.10.2.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.10.4.js")" type="text/javascript"></script>
+
+@{
+    var result = string.Empty;
+    if (ViewData.TemplateInfo.FormattedModelValue.ToString() != string.Empty)
+	{
+        var val = (DateTime)ViewData.TemplateInfo.FormattedModelValue;
+        result = val == DateTime.MinValue ? string.Empty : string.Format("{0:yyyy-MM-dd}",val);
+	}
+}
+
+
+@Html.TextBox("", result, new { @class = "datepicker" })
+
+<script>
+    $(document).ready(function () {
+        $(".datepicker").datepicker(
+            {
+                "dateFormat": "yy-mm-dd",
+                "dafaultDate": "@DateTime.Now.ToString("yyyy-MM-dd")"
+            });
+    });
+</script>

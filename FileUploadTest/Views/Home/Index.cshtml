@@ -5,14 +5,38 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
+<div class="jumbotron" style="height:250px;">
 </div>
 
 @using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
     <div>
         @Html.EditorFor(Model => Model.UploadUrl)
+        
     </div>
     
-    <input type="submit" value="Submit"/>
+    <div>
+        UploadDate @Html.EditorFor(Model => Model.UploadDate)
+        @Html.ValidationMessageFor(Model => Model.UploadDate)
+    </div>
+    
+    <div>
+        Date @Html.EditorFor(Model => Model.Date)
+        @Html.ValidationMessageFor(Model => Model.Date)
+    </div>
+    
+    <div>
+        Phone @Html.EditorFor(Model => Model.Phone)
+        @Html.ValidationMessageFor(Model => Model.Phone)
+    </div>
+    
+    <div>
+        MemberID @Html.EditorFor(Model => Model.MemberID)
+        @Html.ValidationMessageFor(Model => Model.MemberID)
+    </div>
+        
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
+    
 }
