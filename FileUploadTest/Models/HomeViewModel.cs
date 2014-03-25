@@ -28,5 +28,11 @@ namespace FileUploadTest.Models
         [UIHint("MemberID")]
         [Required(ErrorMessage = "必填")]
         public string MemberID { get; set; }
+
+        [UIHint("Currency")]
+        public decimal Money { get; set; }
+
+        [UIHint("RadioButtonList")]
+        public int? UserRole { get; set; }
     }
 }

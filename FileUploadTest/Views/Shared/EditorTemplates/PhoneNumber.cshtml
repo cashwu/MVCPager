@@ -6,7 +6,8 @@
 <script>
     $(document).ready(function () {
         jQuery.mask.definitions["~"] = "[0]";
-        $("#Phone").mask("~999-999-999")
+        jQuery.mask.definitions["*"] = "[9]";
+        $("#Phone").mask("~*99-999-999")
     });
 </script>
 

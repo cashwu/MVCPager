@@ -34,6 +34,19 @@
         MemberID @Html.EditorFor(Model => Model.MemberID)
         @Html.ValidationMessageFor(Model => Model.MemberID)
     </div>
+    
+    <div>
+        Decimal @Html.DisplayFor(Model => Model.Money)
+    </div>
+    
+    List<SelectListItem> list = new List<SelectListItem>();
+    list.Add(new SelectListItem() { Text = "Admin", Value = "0" });
+    list.Add(new SelectListItem() { Text = "Project manager", Value = "1" });
+    list.Add(new SelectListItem() { Text = "User", Value = "2" });
+    
+    <div>
+        @Html.EditorFor(Model => Model.UserRole, new { List = list })
+    </div>
         
     <div>
         <input type="submit" value="Submit" />

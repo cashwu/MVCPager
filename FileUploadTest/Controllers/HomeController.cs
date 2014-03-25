@@ -12,14 +12,19 @@ namespace FileUploadTest.Controllers
     {
         public ActionResult Index()
         {
-            var model = new HomeViewModel();
+            var model = new HomeViewModel()
+            {
+                Money = 1000000,
+                UserRole = 2
+            };
             return View(model);
         }
 
         [HttpPost]
         public ActionResult Index(HomeViewModel model)
         {
-            return View();
+            model.Money = 33333333;
+            return View(model);
         }
 
         public ActionResult About()
